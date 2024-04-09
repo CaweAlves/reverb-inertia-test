@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,4 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/chat', [ChatController::class, 'index']);
+Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('sendMessage');
+
+require __DIR__ . '/auth.php';
