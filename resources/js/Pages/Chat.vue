@@ -15,21 +15,33 @@ onMounted(() => {
             .listen('ChatMessageSent', (e) => {
                 console.log('a')
                 console.log(e)
-                messages.value.push(e.message);
+                messages.value.push(e.message)
             });
     }
 })
+
+function submit() {
+    if (form.newMessage === "") return;
+
+    form.post(
+        route("sendMessage"),
+        {
+            onSuccess: () => {
+                form.reset("newMessage");
+            },
+        }
+    );
+}
 </script>
 
 <template>
-    <form @submit.prevent="form.post('/send-message')">
+    <form @submit.prevent="submit">
         <input v-model="form.newMessage">
         <button type="submit" :disabled="form.processing">enviar</button>
     </form>
-    <div>
-        {{ messages }}
+    <div class="text-center">
         <div v-for="message in messages" :key="message.id">
-            {{ message }}
+            <span class="bg-slate-300">{{ message }}</span>
         </div>
     </div>
 </template>
