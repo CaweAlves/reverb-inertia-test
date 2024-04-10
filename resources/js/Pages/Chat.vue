@@ -2,21 +2,22 @@
 import { ref, onMounted } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 
-onMounted(() => {
-    if (window.Echo) {
-        console.log('echo on')
-        window.Echo.channel('chat')
-            .listen('ChatMessageSent', (e) => {
-                console.log(e)
-                this.messages.push(e.messages);
-            });
-    }
-})
-
 const messages = ref([])
 
 const form = useForm({
     newMessage: '',
+})
+
+onMounted(() => {
+    if (window.Echo) {
+        console.log(window.Echo.channel('chat'))
+        window.Echo.channel('chat')
+            .listen('ChatMessageSent', (e) => {
+                console.log('a')
+                console.log(e)
+                messages.value.push(e.message);
+            });
+    }
 })
 </script>
 
@@ -28,7 +29,7 @@ const form = useForm({
     <div>
         {{ messages }}
         <div v-for="message in messages" :key="message.id">
-            {{ message.text }}
+            {{ message }}
         </div>
     </div>
 </template>
